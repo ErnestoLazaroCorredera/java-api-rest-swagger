@@ -1,0 +1,85 @@
+swagger: "2.0"
+info:
+  title: "Meetup API Demo"
+  description: "Product REST Services"
+  version: "0.1.0"
+schemes: [
+    "http"
+]
+basePath: "/rest/1_0"
+produces: [
+  "application/json"
+]
+definitions:
+    Product:
+      properties:
+        id:
+          type: "integer"
+          description: "Product ID"
+        name:
+          type: "string"
+          description: "Product name"
+          maxLength: 64
+        description:
+          type: "string"
+          description: "Product description"
+          maxLength: 4
+        eanCode:
+          type: "string"
+          description: "Product EAN code"
+          required: 
+            - "id"
+            - "name"
+    Error:
+      properties:
+        code:
+          type: "integer"
+          example : "005001"
+          format: "int32"
+          description: "Error code"
+        message:
+          type: "string"
+          example: "Product not found"
+          description: "Error message"
+paths:
+    /products:
+      get:
+        summary: "Product listing"
+        parameters:
+          - name: "eanCode"
+            in: "query"
+            description: "EAN Code"
+            type: "string"
+            required: false
+          - name: "description"
+            in: "query"
+            description: "Description"
+            type: "string"
+            required: false
+        tags:
+          - "products"
+        responses:
+          200:
+            description: "Product listing"
+            schema:
+              $ref: "#/definitions/Product"
+          400:
+            description: "Bad request"
+            schema:
+              $ref: "#/definitions/Error"
+          401:
+            description: "Unauthorized"
+            schema:
+              $ref: "#/definitions/Error"
+          403:
+            description: "Forbidden"
+            schema:
+              $ref: "#/definitions/Error"
+          404:
+            description: "Not found"
+            schema:
+              $ref: "#/definitions/Error"
+          405:
+            description: "Method not allowed"
+            schema:
+              $ref: "#/definitions/Error"
